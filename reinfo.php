@@ -1,7 +1,8 @@
-<script language=\"Javascript\" type=\"text/javascript\">
-        function download(arg){
-		location.href='".admin/phpfm.php."?action=3&current_dir=".addslashes($current_dir)."&filename='+escape(arg);
-        }
+<script language="javascript">
+	function download(dir,arg){
+            window.location.href="admin/phpfm.php?action=3&current_dir=/home/judge/data/"+
+		escape(dir)+"/&filename="+escape(arg);
+	}
 </script>
 <?php
 	$cache_time=10;
@@ -53,16 +54,24 @@ $view_reinfo="";
 		$view_mail_link= "<a href='mail.php?to_user=".htmlentities($row['user_id'],ENT_QUOTES,"UTF-8")."&title=$MSG_SUBMIT $id'>Mail the auther</a>";
 	
 	$pid = intval($row['problem_id']);	
-	$current_dir="$OJ_DATA/".$pid."/";
+	#$current_dir="$OJ_DATA/".$pid."/";
 
 	$sql="SELECT `error` FROM `runtimeinfo` WHERE `solution_id`=?";
 	$result=pdo_query($sql,$id);
 	 $row=$result[0];
+#echo $row['error'];
+	preg_match("/(?:\[).*\.out(?:\])/",$row['error'],$matches);
+#print_r($matches);
+	$testid = str_replace('[','',$matches[0]);
+#echo $testid;
+	$testid = str_replace('.out]','.in',$testid);
+#echo $testid;
 	if($row&&($OJ_SHOW_DIFF||isset($_SESSION[$OJ_NAME.'_'.'source_browser'])||$isRE)&&($OJ_TEST_RUN||is_valid($row['error'])||isset($_SESSION[$OJ_NAME.'_'.'source_browser']))){	
 		$view_reinfo= htmlentities(str_replace("\n\r","\n",$row['error']),ENT_QUOTES,"UTF-8");
 
 	#$view_reinfo=$view_reinfo."<a href=$OJ_DATA/".strval($pid)."/test0.in>input</a>";
-	$view_reinfo=$view_reinfo."<a href=\"admin/phpfm.php?action=3&current_dir=".addslashes($current_dir)."&filename=test0.in\">input</a>";
+	#$view_reinfo=$view_reinfo."<a href=\"admin/phpfm.php?action=3&current_dir=".addslashes($current_dir)."&filename=test0.in\">input</a>";
+	$view_reinfo=$view_reinfo."<a href=\"JavaScript:download('$pid','$testid')\">$testid</a>";
 	}else{
 		
 		$view_reinfo="sorry , not available (RE:".$isRE.",OJ_SHOW_DIFF:".$OJ_SHOW_DIFF.",TR:".$OJ_TEST_RUN.",valid:".is_valid($row['error']).")";
