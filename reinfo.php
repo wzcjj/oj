@@ -1,7 +1,6 @@
 <script language="javascript">
 	function download(dir,arg){
-            window.location.href="admin/phpfm.php?action=3&current_dir=/home/judge/data/"+
-		escape(dir)+"/&filename="+escape(arg);
+            window.location.href="download.php?current_dir="+escape(dir)+"&filename="+escape(arg);
 	}
 </script>
 <?php
