@@ -24,6 +24,7 @@
         
         $tid=null;
         if ($_REQUEST['action']=='new'){
+exit(0);
                 if (array_key_exists('title',$_POST) && array_key_exists('content', $_POST) && $_POST['title']!='' && $_POST['content']!=''){
                         if(array_key_exists('pid',$_REQUEST)&&$_REQUEST['pid']!='')
                                 $pid=intval($_REQUEST['pid']);
